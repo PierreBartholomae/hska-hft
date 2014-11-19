@@ -8,4 +8,4 @@ Untersuchen unter folgenden Aspekten:
 2. Peaks
 
 Präsentation:
-xx min
+20 min
