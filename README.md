@@ -17,7 +17,7 @@ Subtraktion Liquidität = abgeschlossenen Handels-Spread
 
 # Verständnis
 
-		add order		full order
+	add order		full order
 hft 1 		x			x			hft 1  	-> hft 1: Liquidität++ ; hft 1: Liquidität - -
 hft 0 		x			x			hft 0  	-> hft 0: Liquidität++ ; hft 0: Liquidität - -
 hft 1 		x			x			hft 0  	-> hft 1: Liquidität++ ; hft 0: Liquidität - -
@@ -44,14 +44,14 @@ hft 1 -> 1% - -
 
 # Nützliche Hinweise
 ## (26.11.14)
-Das ist ein zweiteiliger Markt -> "SIDE"-Feld bestimmt, ob du Käufer oder Verkäufer bist.
-Käufer: hat ein maximales limit -> buy
-Verkäufer: hat ein minimales limit -> sell
-Execution Price: ist nur gefüllt wenn nicht zum Limit ge/verkauft wurde
-Partial und Full Order Execution nimmt immer Liquidität aus dem Markt
-Load und Add Order stellt immer Liquidität zur Verfügung
-EUREX vergibt recht an deutsche börse telekomaktien zu handeln und die deutsche börse muss gleichzeitig sell und buy bereitstellen 
-Spread: Differenz zwischen sell und buy
-Je kleiner der Spread desto liquider ist der Markt
-EUREX gibt maximalen Spread vor in %
-Spread zur Messung der Liquidität benutzen
+* Das ist ein zweiteiliger Markt -> "SIDE"-Feld bestimmt, ob du Käufer oder Verkäufer bist.
+* Käufer: hat ein maximales limit -> buy
+* Verkäufer: hat ein minimales limit -> sell
+* Execution Price: ist nur gefüllt wenn nicht zum Limit ge/verkauft wurde
+* Partial und Full Order Execution nimmt immer Liquidität aus dem Markt
+* Load und Add Order stellt immer Liquidität zur Verfügung
+* EUREX vergibt recht an deutsche börse telekomaktien zu handeln und die deutsche börse muss gleichzeitig sell und buy bereitstellen 
+* Spread: Differenz zwischen sell und buy
+* Je kleiner der Spread desto liquider ist der Markt
+* EUREX gibt maximalen Spread vor in %
+* Spread zur Messung der Liquidität benutzen
