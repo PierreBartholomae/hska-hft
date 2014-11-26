@@ -7,10 +7,43 @@ Untersuchen unter folgenden Aspekten:
 1. Insgesamt
 2. Peaks
 
-Präsentation:
+# Präsentation
 20 min
 
-Nützliche Hinweise (26.11.14)
+# Offene Fragen
+Liquidität <- Was ist das? Prozentsatz vom Spread?
+Addition Liquidität = Differenz aus Eurex Spread und dem abgeschlossenen Handels-Spread
+Subtraktion Liquidität = abgeschlossenen Handels-Spread
+
+# Verständnis
+
+		add order		full order
+hft 1 		x			x			hft 1  	-> hft 1: Liquidität++ ; hft 1: Liquidität - -
+hft 0 		x			x			hft 0  	-> hft 0: Liquidität++ ; hft 0: Liquidität - -
+hft 1 		x			x			hft 0  	-> hft 1: Liquidität++ ; hft 0: Liquidität - -
+hft 0 		x			x			hft 1  	-> hft 0: Liquidität++ ; hft 1: Liquidität - -
+
+
+# Beispiel
+
+Eurex Spread = 5%
+Handel wird mit 4% Spread abgeschlossen
+
+hft 0: add		hft 1: full
+
+hft 0 -> 4% ++
+hft 1 -> 4% - -
+
+Handel wird mit 1% Spread abgeschlossen
+
+hft 0: add		hft 1: full
+
+hft 0 -> 1% ++
+hft 1 -> 1% - -
+
+
+# Nützliche Hinweise
+## (26.11.14)
 Das ist ein zweiteiliger Markt -> "SIDE"-Feld bestimmt, ob du Käufer oder Verkäufer bist.
 Käufer: hat ein maximales limit -> buy
 Verkäufer: hat ein minimales limit -> sell
