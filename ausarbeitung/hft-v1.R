@@ -1,3 +1,5 @@
+# TODOS:
+#   1.
 
 # load data
 startDate <- as.numeric(Sys.time())
@@ -9,18 +11,31 @@ endDate <- as.numeric(Sys.time())
 loadingDuration <- endDate-startDate
 loadingDuration
 
+executionPriceData <- subset(data, data$EXECUTION_PRICE != "")
+executionPrice <- executionPriceData$EXECUTION_PRICE
+timeAsInteger <- as.numeric(executionPriceData$TS_ENTRY, format="%dd-%MM-%yyyy %hh:%mm:%ss")
+PriceToTime <- data.frame(timeAsInteger, executionPrice)
+# PriceToTime
+# executionPrice
+# timeAsInteger
+yRange <- range(9.04,9.08)
+medians <- c();
 
-# data$ACTIVITY_TYPE
+maxValue <- 1000
+minValue <- 0
 
-# filters orders
-loadOrders <- which(data$ACTIVITY_TYPE == "LOAD_ORDER")
-addOrders <- which(data$ACTIVITY_TYPE == "ADD_ORDER")
-fullOrders <- which(data$ACTIVITY_TYPE == "FULL_ORDER_EXECUTION")
+for (i in 0:59) {
+  subsets <- subset(PriceToTime, PriceToTime$timeAsInteger > min(PriceToTime$timeAsInteger))
+  # print(subsets)
+  medianTemp <- median(subsets$executionPrice, na.rm = FALSE)
+  c(medians, medianTemp)
+  # print(medianTemp)
+  # print(medians)
+  minValue <- maxValue
+  maxValue <- maxValue+1000
+}
 
-#
-sortedData <- data[order(data$TS_ENTRY),]
-oneLineOfSortedData <- sortedData[100,]
-oneLineOfSortedData
+medians
 
-# 
-plot(c(length(loadOrders), length(addOrders), length(fullOrders)))
+timeAsInteger
+plot(timeAsInteger,executionPrice$EXECUTION_PRICE, ylim = yRange, type = "o",col = "blue")
