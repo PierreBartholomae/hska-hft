@@ -55,3 +55,10 @@ hft 1 -> 1% - -
 * Je kleiner der Spread desto liquider ist der Markt
 * EUREX gibt maximalen Spread vor in %
 * Spread zur Messung der Liquidität benutzen
+* 
+3.12.14
+
+Erster Schritt ist eine vernünftige Kurve für die executions basierend auf dem Preis zu bilden.
+Dafür müssen wir noch die Mediane kalkulieren um eine repräsentative kurve in abhängigkeit der 60 Mediane von der Zeit zu erstellen. 
+Der nächste Schritt wäre dann sich mit den Addorders (Bids und Asks) zu beschäftigen und einen Kanal zu bilden.
+
