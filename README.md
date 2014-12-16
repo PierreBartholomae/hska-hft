@@ -41,7 +41,7 @@ hft 0: add		hft 1: full
 hft 0 -> 1% ++
 hft 1 -> 1% - -
 
-
+# Progress/Todos
 ### 26.11.14
 * Das ist ein zweiteiliger Markt -> "SIDE"-Feld bestimmt, ob du Käufer oder Verkäufer bist.
 * Käufer: hat ein maximales limit -> buy
