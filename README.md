@@ -54,7 +54,7 @@ hft 1 -> 1% - -
 * Je kleiner der Spread desto liquider ist der Markt
 * EUREX gibt maximalen Spread vor in %
 * Spread zur Messung der Liquidität benutzen
-* 
+
 ### 3.12.14
 
 Erster Schritt ist eine vernünftige Kurve für die executions basierend auf dem Preis zu bilden.
