@@ -42,8 +42,7 @@ hft 0 -> 1% ++
 hft 1 -> 1% - -
 
 
-# Nützliche Hinweise
-## (26.11.14)
+### 26.11.14
 * Das ist ein zweiteiliger Markt -> "SIDE"-Feld bestimmt, ob du Käufer oder Verkäufer bist.
 * Käufer: hat ein maximales limit -> buy
 * Verkäufer: hat ein minimales limit -> sell
