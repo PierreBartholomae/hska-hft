@@ -56,17 +56,17 @@ hft 1 -> 1% - -
 * EUREX gibt maximalen Spread vor in %
 * Spread zur Messung der Liquidität benutzen
 * 
-3.12.14
+### 3.12.14
 
 Erster Schritt ist eine vernünftige Kurve für die executions basierend auf dem Preis zu bilden.
 Dafür müssen wir noch die Mediane kalkulieren um eine repräsentative kurve in abhängigkeit der 60 Mediane von der Zeit zu erstellen. 
 Der nächste Schritt wäre dann sich mit den Addorders (Bids und Asks) zu beschäftigen und einen Kanal zu bilden.
 
-16.12.14
+### 16.12.14
 
 Termine
-	bis 7.1.15 Refactoring und Bid-Graph hinzufügen
-	ab dann Montag und Dienstag 1. Block
-Graphen für ExPrices und Sells(Asks) stehen.
-Next up Bid-Graph, Paper, HFTverhältnis
+* bis 7.1.15 Refactoring und Bid-Graph hinzufügen
+* ab dann Montag und Dienstag 1. Block
+* Graphen für ExPrices und Sells(Asks) stehen.
+* Next up Bid-Graph, Paper, HFTverhältnis
 
