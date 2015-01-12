@@ -13,7 +13,7 @@ executionPriceData <- subset(data, data$EXECUTION_PRICE != "")
 executionPrice <- executionPriceData$EXECUTION_PRICE
 timeAsInteger <- as.numeric(executionPriceData$TS_ENTRY, format="%dd-%MM-%yyyy %hh:%mm:%ss")
 PriceToTime <- data.frame(timeAsInteger, executionPrice)
-yRange <- range(9.04,9.08)
+yRange <- range(9.055,9.06)
 medians <- c();
 
 maxValue <- 1000
@@ -38,7 +38,6 @@ plot(medians, ylim = yRange, type = "o",col = "blue")
 # sanitize sell and buy values
 limitData <- subset(data, data$LIMIT_PRICE != "")
 sells <- subset(limitData, data$SIDE == "SELL")
-buys <- subset(limitData, data$SIDE == "BUY") 
 sellPrice <- c()
 sellLength <- length(sells$SIDE)
 exPrice <- sells$EXECUTION_PRICE
@@ -70,12 +69,50 @@ for(i in 0:59){
   subsets <- subset(sellTable, sellTable$timeAsInteger > minValue & sellTable$timeAsInteger <= maxValue)
   sellPrice <- subsets$sellPrice
   medianTemp <- median(sellPrice)
-#  print(medianTemp)
   sellMedians <- c(sellMedians, medianTemp)
-  #print(medians)
   minValue <- maxValue
   maxValue <- maxValue+1000
 }
-print(sellMedians)
-plot(sellMedians, ylim = yRange, type = "o",col = "blue")
-lines(medians, ylim = yRange, type = "o",col = "red")
+
+
+# BID GRAPH
+buys <- subset(limitData, data$SIDE == "BUY") 
+buyPrice <- c()
+buyLength <- length(buys$SIDE)
+exPriceBuy <- buys$EXECUTION_PRICE
+ 
+for(i in 1:buyLength)
+{
+ # print(exPriceBuy[i])
+	if(is.na(exPriceBuy[i]) == TRUE){
+		buyPrice <- c(buyPrice, buys$LIMIT_PRICE[i])
+	}
+	else {
+		buyPrice <- c(buyPrice, buys$EXECUTION_PRICE[i])
+	}
+}
+print(buyPrice)
+buys["buyPrice"] <- NA
+buys$buyPrice <- buyPrice
+
+# get medians for specific time ranges
+buyMedians <- c();
+timeAsInteger <- as.numeric(buys$TS_ENTRY, format="%dd-%MM-%yyyy %hh:%mm:%ss")
+buyPrice <- buys$buyPrice
+buyTable <- data.frame(timeAsInteger, buyPrice)
+
+maxValue <- 1000
+minValue <- 0
+for(i in 0:59){
+  
+  subsets <- subset(buyTable, buyTable$timeAsInteger > minValue & buyTable$timeAsInteger <= maxValue)
+  buyPrice <- subsets$buyPrice
+  medianTemp <- median(buyPrice)
+  buyMedians <- c(buyMedians, medianTemp)
+  minValue <- maxValue
+  maxValue <- maxValue+1000
+}
+#PRINTING
+plot(sellMedians, ylim = yRange, type = "l",col = "blue")
+lines(buyMedians, ylim = yRange, type = "l",col = "green")
+lines(medians, ylim = yRange, type = "l",col = "red")
