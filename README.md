@@ -19,8 +19,11 @@ Subtraktion Liquidität = abgeschlossenen Handels-Spread
 
 	add order		full order
 hft 1 		x			x			hft 1  	-> hft 1: Liquidität++ ; hft 1: Liquidität - -
+
 hft 0 		x			x			hft 0  	-> hft 0: Liquidität++ ; hft 0: Liquidität - -
+
 hft 1 		x			x			hft 0  	-> hft 1: Liquidität++ ; hft 0: Liquidität - -
+
 hft 0 		x			x			hft 1  	-> hft 0: Liquidität++ ; hft 1: Liquidität - -
 
 
@@ -32,6 +35,7 @@ Handel wird mit 4% Spread abgeschlossen
 hft 0: add		hft 1: full
 
 hft 0 -> 4% ++
+
 hft 1 -> 4% - -
 
 Handel wird mit 1% Spread abgeschlossen
@@ -39,6 +43,7 @@ Handel wird mit 1% Spread abgeschlossen
 hft 0: add		hft 1: full
 
 hft 0 -> 1% ++
+
 hft 1 -> 1% - -
 
 # Progress/Todos
