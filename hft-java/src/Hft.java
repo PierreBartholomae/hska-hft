@@ -14,8 +14,8 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
 public class Hft {
 	public static void main(String[] args) {
 
-		//String dataPath = "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/";
-		String dataPath = "C:\\Users\\Moe\\Desktop\\BigData\\";
+		String dataPath = "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/";
+		//String dataPath = "C:\\Users\\Moe\\Desktop\\BigData\\";
 		
 		//Basic MethodPaths
 		String dataIndexedPath = dataPath + "hft-data-indexed.csv";
