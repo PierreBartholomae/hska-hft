@@ -53,14 +53,15 @@ loadDataBuyTable <- function(dataPath,rows) {
 # -------------------------------- #
 # plot function
 
-plotData <- function (executionPriceTableData, sellTableData, buyTableData, yRange = range(9.035,9.08), mode) {  
+plotData <- function (executionPriceTableData, sellTableData, buyTableData, yRange = range(9.035,9.08), mode, plotType = "s") {  
   
   startDate <- as.numeric(Sys.time());
   
-  plot(sellTableData$ID, sellTableData$SellPrice, ylim = yRange, col = "green")
-  lines(buyTableData$ID, buyTableData$BuyPrice, ylim = yRange ,col = "blue")
-  lines(executionPriceTableData$ID, executionPriceTableData$EXECUTION_PRICE, ylim = yRange, col = "red")
+  plot(sellTableData$ID, sellTableData$SellPrice, ylim = yRange, type=plotType, col = "blue", xlab="ID", ylab="Price",)
+  lines(buyTableData$ID, buyTableData$BuyPrice, ylim = yRange, type=plotType, col = "red")
+  lines(executionPriceTableData$ID, executionPriceTableData$EXECUTION_PRICE, ylim = yRange, type=plotType, col = "white")
   title(main=paste("Mode:", mode), col.main="red", font.main=4)
+  legend("bottomleft", inset=.05, c("Buy price","Sell price","Execution price"), fill=c("blue","red","white"))
   
   endDate <- as.numeric(Sys.time())
   plottingDuration <- endDate-startDate
@@ -83,21 +84,20 @@ getPaths <- function(mode="Full") {
   
   return(paths)
 }
-  
+
 # -------------------------------- #
 # Main
 
 # modes: Full, HFT, nonHFT
-mode <- "HFT"
+mode <- "Full"
 paths <- getPaths(mode)
 
 # any number. negativ value will ignore this parameter (for all rows) 
-rows <- 2000000
+rows <- -1
 
 executionPriceTableData <- loadDataExecutionTable(paths[1], rows)
 sellTableData <- loadDataSellTable(paths[2], rows)
 buyTableData <- loadDataBuyTable(paths[3], rows)
 
 # range(9.035,9.08)
-plotData(executionPriceTableData, sellTableData, buyTableData, range(8.95,9.1), mode)
-
+plotData(executionPriceTableData, sellTableData, buyTableData, range(8.98,9.1), mode, plotType = "s")

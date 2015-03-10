@@ -5,9 +5,7 @@
 loadSpreadTable <- function(dataPath) {  
   startDate <- as.numeric(Sys.time());
   
-  dataHeader <- read.csv(dataPath, sep=";", header=FALSE, nrows=1)
-  spreadTableData <- read.csv(dataPath, sep=";")
-  colnames(spreadTableData) <- unlist(dataHeader)
+  spreadTableData <- read.csv(dataPath, sep=";", skip=1, col.names="Spreads")
   
   endDate <- as.numeric(Sys.time())
   loadingDuration <- endDate-startDate
@@ -19,12 +17,12 @@ loadSpreadTable <- function(dataPath) {
 # -------------------------------- #
 # plot function
 
-plotData <- function (spreadTable) {  
+plotData <- function (spreadTable, mode, plotType = "s") {  
   
   startDate <- as.numeric(Sys.time());
   
-  plot(sellTableData$ID, col = "green")
-  title(main=paste("Mode: SpreadTable"), col.main="red", font.main=4)
+  plot(spreadTable$Spreads, spreadTable$SellPrice, type = plotType, col = "red")
+  title(main=paste("Mode:", mode), col.main="red", font.main=4)
   
   endDate <- as.numeric(Sys.time())
   plottingDuration <- endDate-startDate
@@ -32,13 +30,26 @@ plotData <- function (spreadTable) {
 }
 
 # -------------------------------- #
-# Path
+# Paths
+# modes: Full, HFT, nonHFT
 
-getPaths <- function() {
+getPath <- function(mode="Full") {
   dataPath <- "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/"
   #dataPath <- "C:\\Users\\Moe\\Desktop\\BigData\\"
   
-  spreadTableDataPath <- paste(dataPath, "hft-data-spreadTable.csv", sep="")
+  spreadTableDataPath <- paste(dataPath, "hft-data-spreadTable", mode, ".csv", sep="")
   
   return(spreadTableDataPath)
 }
+
+# -------------------------------- #
+# Main
+
+# modes: Full, HFT, nonHFT
+mode <- "HFT"
+path <- getPath(mode)
+
+spreadTableData <- loadSpreadTable(path)
+
+plotData(spreadTableData, mode, plotType = "l")
+
