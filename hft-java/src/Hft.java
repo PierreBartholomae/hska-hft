@@ -39,7 +39,9 @@ public class Hft {
 		String dataSellTablePathnonHFT = dataPath + "hft-data-sellTablenonHFT.csv";
 		
 		//Spread
-		String spreadTablePath = dataPath + "hft-data-spreadTable.csv";
+		String spreadTablePathFull = dataPath + "hft-data-spreadTableFull.csv";
+		String spreadTablePathHFT = dataPath + "hft-data-spreadTableHFT.csv";
+		String spreadTablePathnonHFT = dataPath + "hft-data-spreadTablenonHFT.csv";
 
 
 		try {
@@ -63,7 +65,10 @@ public class Hft {
 //			sellTable(datanonHFTPartPath, dataSellTablePathnonHFT, ";");
 //			
 			//calcSpreads
-			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePath, 10000);
+			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePathFull, 10000);
+			calcSpread(dataSellTablePathHFT, dataBuyTablePathHFT, spreadTablePathHFT, 10000);
+			calcSpread(dataSellTablePathnonHFT, dataBuyTablePathnonHFT, spreadTablePathnonHFT, 10000);
+		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
