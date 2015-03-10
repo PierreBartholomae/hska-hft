@@ -1,8 +1,8 @@
 
 # load data
 startDate <- as.numeric(Sys.time());
-dataHeader <- read.csv("C:\\Users\\Moe\\Desktop\\BigData\\hft-data.csv", sep=";", header=FALSE, nrows=1)
-data <- read.csv("C:\\Users\\Moe\\Desktop\\BigData\\hft-data.csv", sep=";", nrows=300000)
+dataHeader <- read.csv("/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/daten.csv", sep=";", header=FALSE, nrows=1)
+data <- read.csv("/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/daten.csv", sep=";", nrows=300000)
 colnames(data) <- unlist(dataHeader)
 endDate <- as.numeric(Sys.time())
 
@@ -19,16 +19,16 @@ medians <- c();
 maxValue <- 1000
 minValue <- 0
 for(i in 0:59){
-
-subsets <- subset(PriceToTime, PriceToTime$timeAsInteger > minValue & PriceToTime$timeAsInteger <= maxValue)
-exPrice <- subsets$executionPrice
-
-medianTemp <- median(exPrice)
+	
+	subsets <- subset(PriceToTime, PriceToTime$timeAsInteger > minValue & PriceToTime$timeAsInteger <= maxValue)
+	exPrice <- subsets$executionPrice
+	
+	medianTemp <- median(exPrice)
 #print(medianTemp)
-medians <- c(medians, medianTemp)
+	medians <- c(medians, medianTemp)
 #print(medians)
-minValue <- maxValue
-maxValue <- maxValue+1000
+	minValue <- maxValue
+	maxValue <- maxValue+1000
 }
 print(medians)
 timeAsInteger
@@ -41,10 +41,10 @@ sells <- subset(limitData, data$SIDE == "SELL")
 sellPrice <- c()
 sellLength <- length(sells$SIDE)
 exPrice <- sells$EXECUTION_PRICE
- 
+
 for(i in 1:sellLength)
 {
- # print(exPrice[i])
+	# print(exPrice[i])
 	if(is.na(exPrice[i]) == TRUE){
 		sellPrice <- c(sellPrice, sells$LIMIT_PRICE[i])
 	}
@@ -65,13 +65,13 @@ sellTable <- data.frame(timeAsInteger, sellPrice)
 maxValue <- 1000
 minValue <- 0
 for(i in 0:59){
-  
-  subsets <- subset(sellTable, sellTable$timeAsInteger > minValue & sellTable$timeAsInteger <= maxValue)
-  sellPrice <- subsets$sellPrice
-  medianTemp <- median(sellPrice)
-  sellMedians <- c(sellMedians, medianTemp)
-  minValue <- maxValue
-  maxValue <- maxValue+1000
+	
+	subsets <- subset(sellTable, sellTable$timeAsInteger > minValue & sellTable$timeAsInteger <= maxValue)
+	sellPrice <- subsets$sellPrice
+	medianTemp <- median(sellPrice)
+	sellMedians <- c(sellMedians, medianTemp)
+	minValue <- maxValue
+	maxValue <- maxValue+1000
 }
 
 
@@ -80,10 +80,10 @@ buys <- subset(limitData, data$SIDE == "BUY")
 buyPrice <- c()
 buyLength <- length(buys$SIDE)
 exPriceBuy <- buys$EXECUTION_PRICE
- 
+
 for(i in 1:buyLength)
 {
- # print(exPriceBuy[i])
+	# print(exPriceBuy[i])
 	if(is.na(exPriceBuy[i]) == TRUE){
 		buyPrice <- c(buyPrice, buys$LIMIT_PRICE[i])
 	}
@@ -104,13 +104,13 @@ buyTable <- data.frame(timeAsInteger, buyPrice)
 maxValue <- 1000
 minValue <- 0
 for(i in 0:59){
-  
-  subsets <- subset(buyTable, buyTable$timeAsInteger > minValue & buyTable$timeAsInteger <= maxValue)
-  buyPrice <- subsets$buyPrice
-  medianTemp <- median(buyPrice)
-  buyMedians <- c(buyMedians, medianTemp)
-  minValue <- maxValue
-  maxValue <- maxValue+1000
+	
+	subsets <- subset(buyTable, buyTable$timeAsInteger > minValue & buyTable$timeAsInteger <= maxValue)
+	buyPrice <- subsets$buyPrice
+	medianTemp <- median(buyPrice)
+	buyMedians <- c(buyMedians, medianTemp)
+	minValue <- maxValue
+	maxValue <- maxValue+1000
 }
 #PRINTING
 plot(sellMedians, ylim = yRange, type = "l",col = "blue")
