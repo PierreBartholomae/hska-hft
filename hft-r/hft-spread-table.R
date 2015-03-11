@@ -157,7 +157,7 @@ spreadTableDatanonHFT <- loadSpreadTable(path)
 # -------------------------------- #
 # Plot for step size > 0
 
-#plotAllData(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.045), mode, plotType = "o")
+plotAllData(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.045), mode, plotType = "o")
 
 #plotFullData(spreadTableDataFull, yRange = range(0.004,0.045), mode, plotType = "o")
 
@@ -167,4 +167,4 @@ spreadTableDatanonHFT <- loadSpreadTable(path)
 # -------------------------------- #
 # Plot for step size == -1 (for spread over all rows)
 
-plotAllDataBarplot(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT)
+#plotAllDataBarplot(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT)

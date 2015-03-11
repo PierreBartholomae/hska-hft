@@ -73,8 +73,8 @@ plotData <- function (executionPriceTableData, sellTableData, buyTableData, yRan
 # modes: Full, HFT, nonHFT
 
 getPaths <- function(mode="Full") {
-  dataPath <- "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/"
-  #dataPath <- "C:\\Users\\Moe\\Desktop\\BigData\\"
+  dataPath <- "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/data/"
+  #dataPath <- "C:\\Users\\Moe\\Desktop\\BigData\\data\\"
   
   dataExecutionPriceTablePath <- paste(dataPath, "hft-data-executionPriceTable", mode, ".csv", sep="")
   dataBuyTablePath <- paste(dataPath, "hft-data-buyTable", mode, ".csv", sep="")
