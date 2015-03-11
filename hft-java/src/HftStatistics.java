@@ -63,13 +63,14 @@ public class HftStatistics {
 		try {
 			// calcSpreads
 			// dataSellTables and dataBuyTables must exists!
-			double calcSpreadRange = 10000;
+			int calcSpreadRange = -1;
+			//int calcSpreadRange = 10000;
 			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePathFull, calcSpreadRange);
 			calcSpread(dataSellTablePathHFT, dataBuyTablePathHFT, spreadTablePathHFT, calcSpreadRange);
 			calcSpread(dataSellTablePathnonHFT, dataBuyTablePathnonHFT, spreadTablePathnonHFT, calcSpreadRange);
 			
 			// get more statistics
-			getActivityTypeFrequencies(dataSellTablePathHFT, dataBuyTablePathHFT, dataSellTablePathnonHFT, dataBuyTablePathnonHFT, activityTablePath, ";");
+			//getActivityTypeFrequencies(dataSellTablePathHFT, dataBuyTablePathHFT, dataSellTablePathnonHFT, dataBuyTablePathnonHFT, activityTablePath, ";");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -78,23 +79,36 @@ public class HftStatistics {
 	}
 
 	// range: any number or -1 for all
-	public static void calcSpread (String sellFile, String buyFile, String resultFile, double range) throws IOException{
+	public static void calcSpread (String sellFile, String buyFile, String resultFile, Integer stepCount) throws IOException{
 		BufferedReader br1 = new BufferedReader(new FileReader(new File(sellFile)));
 		BufferedReader br2 = new BufferedReader(new FileReader(new File(buyFile)));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(resultFile)));
 
-		ArrayList<Double> sellList = new ArrayList<Double>();
-		ArrayList<Double> buyList = new ArrayList<Double>();
+		ArrayList<String> sellList = new ArrayList<String>();
+		ArrayList<String> buyList = new ArrayList<String>();
 		
-		sellList = getPriceForColumn(br1, range);
-		buyList = getPriceForColumn(br2, range);
+		sellList = getPriceForColumn(br1, stepCount);
+		buyList = getPriceForColumn(br2, stepCount);
 		
-		bw.write("ID;Spreads;" + "\n");
-		for(int i = 0; i < sellList.size() && i < buyList.size(); i++){
-			double priceDifference = sellList.get(i) - buyList.get(i);
-			double priceDifferenceWithPrecision = new BigDecimal(priceDifference).setScale(7, BigDecimal.ROUND_HALF_UP).doubleValue();
+		bw.write("CurrentStep;Spread;SellBuyPercentage" + "\n");
+		for (int i = 0; i < sellList.size() && i < buyList.size(); i++) {
+			String[] sellSplit = sellList.get(i).split(";");
+			double sellPrice = Double.parseDouble(sellSplit[1]);
+			String[] buySplit = buyList.get(i).split(";");
+			double buyPrice = Double.parseDouble(buySplit[1]);
 			
-			bw.write(String.valueOf(priceDifferenceWithPrecision) + "\n");
+			double priceDifference = sellPrice - buyPrice;
+			double priceDifferenceWithPrecision = new BigDecimal(priceDifference).setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+			
+			if (stepCount == -1 || (Double.parseDouble(sellSplit[0]) == Double.parseDouble(buySplit[0]))) {
+				double sellCount = Double.parseDouble(sellSplit[2]);
+				double buyCount = Double.parseDouble(buySplit[2]);
+				
+				double countDifference = sellCount - buyCount;
+				double countDifferenceWithPrecision = new BigDecimal(countDifference).setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+				bw.write(sellSplit[0] + ";" + String.valueOf(priceDifferenceWithPrecision) + ";" + String.valueOf(countDifferenceWithPrecision) + "\n");
+			}
 		}
 		
 		br1.close();
@@ -104,24 +118,33 @@ public class HftStatistics {
 		System.out.println("calcSpread finished");
 	}
 	
-	public static ArrayList<Double> getPriceForColumn(BufferedReader br, double range) throws IOException {
+	public static ArrayList<String> getPriceForColumn(BufferedReader br, Integer stepCount) throws IOException {
 		String line = br.readLine();
 		int count = 0;
 		double priceValue = 0;
-		ArrayList<Double> priceList = new ArrayList<Double>();
+		int rowID = 0;
+		int currentStepCount = stepCount;
+		ArrayList<String> priceList = new ArrayList<String>();
 		
 		while((line=br.readLine())!=null){
 			String[] split = line.split(";");
 			priceValue += Double.parseDouble(split[28]);
+			rowID = Integer.parseInt(split[0]);
 			count++;
-			if (count == range){
-				priceList.add(priceValue/range);
+			if (stepCount != -1 && rowID >= currentStepCount){
+				double currentSpread = priceValue/count;
+				String row = currentStepCount + ";" + String.valueOf(currentSpread) + ";" + count; 
+				priceList.add(row);
 				priceValue = 0;
+				currentStepCount += stepCount;
 				count = 0;
 			}
 		}
-		if(range == -1) {
-			priceList.add(priceValue/count);
+		if(stepCount == -1) {
+			double currentSpread = priceValue/count;
+			String row = count + ";" + String.valueOf(currentSpread) + ";" + count; 
+
+			priceList.add(row);
 		}
 		return priceList;
 	}
