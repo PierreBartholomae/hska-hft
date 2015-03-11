@@ -53,14 +53,16 @@ plotData <- function (tableData) {
   lineHeader <- c("Add Order", "Modify Order", "Delete Order", "Full Order Execution")
     
   barplot(data, main="Activity frequencies",
-          col=c(color1,color2,color3,color4), beside=TRUE, space=c(0.2,0.75), xaxt="n")
+          col=c(color1,color2,color3,color4),
+          xlab="Activity types", ylab="Frequency",
+          beside=TRUE, space=c(0.2,0.75), xaxt="n")
   
   axis(1, at=c(3, 8.5, 14, 19), label=lineHeader)
   
-  label1 <- paste("hft:", tableData[1,1], "- side:", tableData[1,2], sep=" ")
-  label2 <- paste("hft:", tableData[2,1], "- side:", tableData[2,2], sep=" ")
-  label3 <- paste("hft:", tableData[3,1], "- side:", tableData[3,2], sep=" ")
-  label4 <- paste("hft:", tableData[4,1], "- side:", tableData[4,2], sep=" ")
+  label1 <- paste("HFT:", tableData[1,1], "- Side:", tableData[1,2], sep=" ")
+  label2 <- paste("HFT:", tableData[2,1], "- Side:", tableData[2,2], sep=" ")
+  label3 <- paste("HFT:", tableData[3,1], "- Side:", tableData[3,2], sep=" ")
+  label4 <- paste("HFT:", tableData[4,1], "- Side:", tableData[4,2], sep=" ")
   
   legend("topright", c(label1, label2, label3, label4), fill=c(color1,color2,color3,color4),
          inset=.05, bty="n")
