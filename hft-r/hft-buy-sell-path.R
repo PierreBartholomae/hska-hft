@@ -61,7 +61,7 @@ plotData <- function (executionPriceTableData, sellTableData, buyTableData, yRan
   lines(buyTableData$ID, buyTableData$BuyPrice, ylim = yRange, type=plotType, col = "red")
   lines(executionPriceTableData$ID, executionPriceTableData$EXECUTION_PRICE, ylim = yRange, type=plotType, col = "white")
   title(main=paste("Mode:", mode), col.main="red", font.main=4)
-  legend("bottomleft", inset=.05, c("Buy price","Sell price","Execution price"), fill=c("blue","red","white"))
+  legend("bottomleft", inset=.05, c("Buy price","Sell price","Execution price"), fill=c("red","blue","white"))
   
   endDate <- as.numeric(Sys.time())
   plottingDuration <- endDate-startDate

@@ -1,14 +1,9 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
 
 
 public class Hft {
@@ -37,38 +32,26 @@ public class Hft {
 		String dataSellTablePathFull = dataPath + "hft-data-sellTableFull.csv";
 		String dataSellTablePathHFT = dataPath + "hft-data-sellTableHFT.csv";
 		String dataSellTablePathnonHFT = dataPath + "hft-data-sellTablenonHFT.csv";
-		
-		//Spread
-		String spreadTablePathFull = dataPath + "hft-data-spreadTableFull.csv";
-		String spreadTablePathHFT = dataPath + "hft-data-spreadTableHFT.csv";
-		String spreadTablePathnonHFT = dataPath + "hft-data-spreadTablenonHFT.csv";
-
 
 		try {
-//			addIndex(dataPath + "hft-data.csv", dataIndexedPath, ";");
-//			fixData(dataIndexedPath, dataFixedPath, ";");
-//			hftSplit(dataFixedPath, dataHFTPartPath, datanonHFTPartPath, ";");
-//			
-//			//FullSet
-//			executionPriceTable(dataFixedPath, dataExecutionPriceTablePathFull, ";");
-//			buyTable(dataFixedPath, dataBuyTablePathFull, ";");
-//			sellTable(dataFixedPath, dataSellTablePathFull, ";");
-//			
-//			//HFTPart
-//			executionPriceTable(dataHFTPartPath, dataExecutionPriceTablePathHFT, ";");
-//			buyTable(dataHFTPartPath, dataBuyTablePathHFT, ";");
-//			sellTable(dataHFTPartPath, dataSellTablePathHFT, ";");
-//			
-//			//non-HFTPart
-//			executionPriceTable(datanonHFTPartPath, dataExecutionPriceTablePathnonHFT, ";");
-//			buyTable(datanonHFTPartPath, dataBuyTablePathnonHFT, ";");
-//			sellTable(datanonHFTPartPath, dataSellTablePathnonHFT, ";");
-//			
-			//calcSpreads
-			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePathFull, 10000);
-			calcSpread(dataSellTablePathHFT, dataBuyTablePathHFT, spreadTablePathHFT, 10000);
-			calcSpread(dataSellTablePathnonHFT, dataBuyTablePathnonHFT, spreadTablePathnonHFT, 10000);
-		
+			addIndex(dataPath + "hft-data.csv", dataIndexedPath, ";");
+			fixData(dataIndexedPath, dataFixedPath, ";");
+			hftSplit(dataFixedPath, dataHFTPartPath, datanonHFTPartPath, ";");
+			
+			//FullSet
+			executionPriceTable(dataFixedPath, dataExecutionPriceTablePathFull, ";");
+			buyTable(dataFixedPath, dataBuyTablePathFull, ";");
+			sellTable(dataFixedPath, dataSellTablePathFull, ";");
+			
+			//HFTPart
+			executionPriceTable(dataHFTPartPath, dataExecutionPriceTablePathHFT, ";");
+			buyTable(dataHFTPartPath, dataBuyTablePathHFT, ";");
+			sellTable(dataHFTPartPath, dataSellTablePathHFT, ";");
+			
+			//non-HFTPart
+			executionPriceTable(datanonHFTPartPath, dataExecutionPriceTablePathnonHFT, ";");
+			buyTable(datanonHFTPartPath, dataBuyTablePathnonHFT, ";");
+			sellTable(datanonHFTPartPath, dataSellTablePathnonHFT, ";");		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -234,48 +217,5 @@ public class Hft {
 		}
 		bw.close();
 		br.close();
-	}
-
-	public static void calcSpread (String sellFile, String buyFile, String resultFile, double range) throws IOException{
-		BufferedReader br1 = new BufferedReader(new FileReader(new File(sellFile)));
-		BufferedReader br2 = new BufferedReader(new FileReader(new File(buyFile)));
-		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(resultFile)));
-		String line = br1.readLine();
-		double sellValue = 0;
-		ArrayList<Double> sellList = new ArrayList<Double>();
-		int count = 0;
-		double buyValue = 0;
-		ArrayList<Double> buyList = new ArrayList<Double>();
-
-		while((line=br1.readLine())!=null){
-			String[] split = line.split(";");
-			sellValue += Double.parseDouble(split[28]);
-			count++;
-			if (count == range){
-				sellList.add(sellValue/range);
-				sellValue = 0;
-				count = 0;
-			}
-		}
-		count = 0;
-		line = br2.readLine();
-		while((line=br2.readLine())!=null && count <= range){
-			String[] split = line.split(";");
-			buyValue += Double.parseDouble((split[28]));
-			count++;
-			if (count == range){
-				buyList.add(buyValue/range);
-				buyValue = 0;
-				count = 0;
-			}
-		}
-		bw.write("Spreads with a range of " + range + "\n");
-		for(int i = 0; i < sellList.size() && i < buyList.size(); i++){
-			bw.write(String.valueOf(sellList.get(i) - buyList.get(i)) + "\n");
-		}
-		br1.close();
-		br2.close();
-		bw.close();
-		
 	}
 }
