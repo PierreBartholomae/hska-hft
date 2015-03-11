@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class HftStatistics {
 
@@ -21,11 +22,21 @@ public class HftStatistics {
 	public static final Integer COLUMN_PRICE = 29;
 
 	public static void main(String[] args) {
-		String dataPath = "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/";
-		//String dataPath = "C:\\Users\\Moe\\Desktop\\BigData\\";
-
-		String statisticsDirectoryPath = dataPath + "statistics/";
-		//String statisticsDirectoryPath = dataPath + "statistics\\";
+		
+	    String dataPath = "";
+	    String statisticsDirectoryPath = "";
+	    String dataDirectoryPath = "";
+	    
+	    String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+	    if (OS.indexOf("win") >= 0) {
+			dataPath = "C:\\Users\\Moe\\Desktop\\BigData\\";
+			statisticsDirectoryPath = dataPath + "statistics\\";			
+			dataDirectoryPath = dataPath + "data\\";
+	    } else {
+			dataPath = "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/";
+			statisticsDirectoryPath = dataPath + "statistics/";
+			dataDirectoryPath = dataPath + "data/";
+	    }
 
 		File statisticsDirectory = new File(statisticsDirectoryPath);
 		if (!statisticsDirectory.exists()) {
@@ -37,20 +48,20 @@ public class HftStatistics {
 		}
 		
 		//Basic MethodPaths
-		String dataIndexedPath = dataPath + "hft-data-indexed.csv";
-		String dataFixedPath = dataPath + "hft-data-fixed.csv";
-		String dataHFTPartPath = dataPath + "hft-data-hftPart.csv";
-		String datanonHFTPartPath = dataPath + "hft-data-nonhftPart.csv";
+		String dataIndexedPath = dataDirectoryPath + "hft-data-indexed.csv";
+		String dataFixedPath = dataDirectoryPath + "hft-data-fixed.csv";
+		String dataHFTPartPath = dataDirectoryPath + "hft-data-hftPart.csv";
+		String datanonHFTPartPath = dataDirectoryPath + "hft-data-nonhftPart.csv";
 
 		//BuyTables
-		String dataBuyTablePathFull = dataPath + "hft-data-buyTableFull.csv";
-		String dataBuyTablePathHFT = dataPath + "hft-data-buyTableHFT.csv";
-		String dataBuyTablePathnonHFT = dataPath + "hft-data-buyTablenonHFT.csv";
+		String dataBuyTablePathFull = dataDirectoryPath + "hft-data-buyTableFull.csv";
+		String dataBuyTablePathHFT = dataDirectoryPath + "hft-data-buyTableHFT.csv";
+		String dataBuyTablePathnonHFT = dataDirectoryPath + "hft-data-buyTablenonHFT.csv";
 
 		//SellTables
-		String dataSellTablePathFull = dataPath + "hft-data-sellTableFull.csv";
-		String dataSellTablePathHFT = dataPath + "hft-data-sellTableHFT.csv";
-		String dataSellTablePathnonHFT = dataPath + "hft-data-sellTablenonHFT.csv";
+		String dataSellTablePathFull = dataDirectoryPath + "hft-data-sellTableFull.csv";
+		String dataSellTablePathHFT = dataDirectoryPath + "hft-data-sellTableHFT.csv";
+		String dataSellTablePathnonHFT = dataDirectoryPath + "hft-data-sellTablenonHFT.csv";
 
 		//Spread
 		String spreadTablePathFull = statisticsDirectoryPath + "hft-data-spreadTableFull.csv";
@@ -61,16 +72,20 @@ public class HftStatistics {
 		String activityTablePath = statisticsDirectoryPath + "hft-data-activityTable.csv";
 
 		try {
+			System.out.println("### Start creating statistics CSVs");
+			
 			// calcSpreads
 			// dataSellTables and dataBuyTables must exists!
-			int calcSpreadRange = -1;
-			//int calcSpreadRange = 10000;
+			//int calcSpreadRange = -1;
+			int calcSpreadRange = 10000;
 			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePathFull, calcSpreadRange);
 			calcSpread(dataSellTablePathHFT, dataBuyTablePathHFT, spreadTablePathHFT, calcSpreadRange);
 			calcSpread(dataSellTablePathnonHFT, dataBuyTablePathnonHFT, spreadTablePathnonHFT, calcSpreadRange);
 			
 			// get more statistics
-			//getActivityTypeFrequencies(dataSellTablePathHFT, dataBuyTablePathHFT, dataSellTablePathnonHFT, dataBuyTablePathnonHFT, activityTablePath, ";");
+			getActivityTypeFrequencies(dataSellTablePathHFT, dataBuyTablePathHFT, dataSellTablePathnonHFT, dataBuyTablePathnonHFT, activityTablePath, ";");
+			
+			System.out.println("### Finished creating data CSVs");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
