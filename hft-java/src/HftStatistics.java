@@ -307,6 +307,9 @@ public class HftStatistics {
 		}
 		
 		result = Math.sqrt((varianceSum/priceLength));
-		return result;
+		
+		double resultWithPrecision = new BigDecimal(result).setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+		return resultWithPrecision;
 	}
 }
