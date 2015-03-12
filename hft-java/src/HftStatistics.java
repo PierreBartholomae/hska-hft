@@ -114,7 +114,7 @@ public class HftStatistics {
 			deviationsPathArray.add(dataSellTablePathHFT);
 			deviationsPathArray.add(dataSellTablePathnonHFT);
 			getStandardDeviations(deviationsPathArray, standardDeviationTablePath);
-			
+						
 			System.out.println("### Finished creating data CSVs");
 
 		} catch (IOException e) {
@@ -255,9 +255,12 @@ public class HftStatistics {
 	}
 	
 	public static void getStandardDeviations(ArrayList<String> paths, String resultFile) throws IOException {
-		ArrayList<Double> resultList = new ArrayList<Double>(9);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(resultFile)));
+		bw.write("TableName;StandardDeviation" + "\n");
+
 		for (String path : paths) {
-			double result = 0;
+			double standardDeviation = 0;
+			String newLine = "";
 			String currentLine;
 			ArrayList<Double> priceList = new ArrayList<Double>(9);
 			BufferedReader br = new BufferedReader(new FileReader(new File(path)));
@@ -268,30 +271,42 @@ public class HftStatistics {
 				priceList.add(Double.parseDouble(cell[COLUMN_PRICE]));
 			}
 			
-			result = calculateStandardDeviations(priceList);
+			standardDeviation = calculateStandardDeviations(priceList);
 			
-			resultList.add(result);
+			String[] pathSplit = path.split("/");
+			String fullTableName = pathSplit[pathSplit.length-1];
+			String[] tableNameSplit = fullTableName.split("\\.");
+			String tableName = tableNameSplit[0];
+			
+			newLine = tableName + ";" + String.valueOf(standardDeviation); 
+					
+			bw.write(newLine + "\n");
 			br.close();
 		}
 		
-		// Write results in file
-		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(resultFile)));
-		for (Double result : resultList) {
-			bw.write(result + "\n");
-		}
 		bw.close();
+		
 		System.out.println("getStandardDeviations finished");
-
 	}
 	
 	public static Double calculateStandardDeviations(ArrayList<Double> priceList) {
 		double result = 0;
-		double sum = 0;
+		double sumPrice = 0;
+		int priceLength = priceList.size();
+		double averagePrice = 0;
+		double varianceSum = 0;
+
 		for (Double price : priceList) {
-			sum += price;
+			sumPrice += price;
+		}
+
+		averagePrice = sumPrice/priceLength;
+		
+		for (Double price : priceList) {
+			varianceSum += Math.pow((price-averagePrice), 2);
 		}
 		
-		result = Math.sqrt(sum/priceList.size());
+		result = Math.sqrt((varianceSum/priceLength));
 		return result;
 	}
 }
