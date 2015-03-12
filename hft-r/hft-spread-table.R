@@ -101,17 +101,21 @@ plotAllDataBarplot <- function (spreadTableDataFull, spreadTableDataHFT, spreadT
   color3 <- "#31a84a"
   color4 <- "#f2811c"
   
-  data <- matrix(c(spreadTableDataFull[1,2], spreadTableDataHFT[1,2], spreadTableDatanonHFT[1,2]), nrow=3, ncol=1)
-  
+  dataList <- c(spreadTableDataFull[1,2], spreadTableDataHFT[1,2], spreadTableDatanonHFT[1,2])
+  data <- matrix(dataList, nrow=3, ncol=1)
+
   lineHeader <- c("Full", "HFT", "Non HFT")
   
-  barplot(data, main="Activity frequencies",
-          col=c(color1,color2,color3),
-          ylim=c(0,0.03),
+  image <- barplot(data, col=c(color1,color2,color3),
+          ylim=c(0,0.03), legend=TRUE,
           xlab="Data Source", ylab="Spread",
           beside=TRUE, space=c(0.2,0.75), xaxt="n")
   
+  text(image, dataList-0.00125, labels=dataList, col="black", cex=1)
+  
   axis(1, at=c(1.25,2.5,3.75), label=lineHeader)
+  
+  title(main="Spreads - All data combined", col.main="black", font.main=4)
   
   labelFull <- "Full Data"
   labelHFT <- "HFT Data"
@@ -152,7 +156,7 @@ getPath <- function(mode="Full", isDataRanged=TRUE) {
 # splitted: TRUE or FALSE
 # TRUE for ranged data set
 # FALSE for all data combined
-isDataRanged <- TRUE
+isDataRanged <- FALSE
 
 # modes: Full, HFT, nonHFT
 mode <- "Full"
