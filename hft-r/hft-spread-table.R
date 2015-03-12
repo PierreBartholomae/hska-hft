@@ -128,11 +128,18 @@ plotAllDataBarplot <- function (spreadTableDataFull, spreadTableDataHFT, spreadT
 # Paths
 # modes: Full, HFT, nonHFT
 
-getPath <- function(mode="Full") {
+getPath <- function(mode="Full", isDataRanged=TRUE) {
+    
+  if (isDataRanged) {
+    pathExtension <- "-ranged"
+  } else {
+    pathExtension <- "-all"
+  }
+  
   dataPath <- "/Users/pierre/Dropbox/MYDROPBOX/studium/master/wpfs/high-frequency-trading/daten/statistics/"
   #dataPath <- "C:\\Users\\Moe\\Desktop\\BigData\\statistics\\"
   
-  spreadTableDataPath <- paste(dataPath, "hft-data-spreadTable", mode, ".csv", sep="")
+  spreadTableDataPath <- paste(dataPath, "hft-data-spreadTable", mode, pathExtension, ".csv", sep="")
   print (spreadTableDataPath)
   
   return(spreadTableDataPath)
@@ -141,30 +148,35 @@ getPath <- function(mode="Full") {
 # -------------------------------- #
 # Main
 
+# splitted: TRUE or FALSE
+isDataRanged <- TRUE
+
 # modes: Full, HFT, nonHFT
 mode <- "Full"
-path <- getPath(mode)
+path <- getPath(mode, isDataRanged)
 spreadTableDataFull <- loadSpreadTable(path)
 
 mode <- "HFT"
-path <- getPath(mode)
+path <- getPath(mode, isDataRanged)
 spreadTableDataHFT <- loadSpreadTable(path)
 
 mode <- "nonHFT"
-path <- getPath(mode)
+path <- getPath(mode, isDataRanged)
 spreadTableDatanonHFT <- loadSpreadTable(path)
 
 # -------------------------------- #
 # Plot for step size > 0
+if (isDataRanged) {
+  plotAllData(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.045), mode, plotType = "o")
 
-plotAllData(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.045), mode, plotType = "o")
+  #plotFullData(spreadTableDataFull, yRange = range(0.004,0.045), mode, plotType = "o")
 
-#plotFullData(spreadTableDataFull, yRange = range(0.004,0.045), mode, plotType = "o")
-
-#plotHFTnonHFTData(spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.045), mode, plotType = "o")
-
+  #plotHFTnonHFTData(spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.045), mode, plotType = "o")
+}
 
 # -------------------------------- #
 # Plot for step size == -1 (for spread over all rows)
 
-#plotAllDataBarplot(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT)
+if (!isDataRanged) {
+  plotAllDataBarplot(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT)
+}

@@ -17,9 +17,9 @@ public class HftStatistics {
 	
 	public static final Integer COLUMN_ID = 1;
 	public static final Integer COLUMN_ACTIVITY_TYPE = 9;//10;
-	public static final Integer COLUMN_SIDE = 18;
-	public static final Integer COLUMN_HFT = 28;
-	public static final Integer COLUMN_PRICE = 29;
+	public static final Integer COLUMN_SIDE = 17;
+	public static final Integer COLUMN_HFT = 27;
+	public static final Integer COLUMN_PRICE = 28;
 
 	public static void main(String[] args) {
 		
@@ -52,6 +52,11 @@ public class HftStatistics {
 		String dataFixedPath = dataDirectoryPath + "hft-data-fixed.csv";
 		String dataHFTPartPath = dataDirectoryPath + "hft-data-hftPart.csv";
 		String datanonHFTPartPath = dataDirectoryPath + "hft-data-nonhftPart.csv";
+		
+		//ExecutionPrices
+		String dataExecutionPriceTablePathFull = dataDirectoryPath + "hft-data-executionPriceTableFull.csv";
+		String dataExecutionPriceTablePathHFT = dataDirectoryPath + "hft-data-executionPriceTableHFT.csv";
+		String dataExecutionPriceTablePathnonHFT = dataDirectoryPath + "hft-data-executionPriceTablenonHFT.csv";
 
 		//BuyTables
 		String dataBuyTablePathFull = dataDirectoryPath + "hft-data-buyTableFull.csv";
@@ -63,27 +68,52 @@ public class HftStatistics {
 		String dataSellTablePathHFT = dataDirectoryPath + "hft-data-sellTableHFT.csv";
 		String dataSellTablePathnonHFT = dataDirectoryPath + "hft-data-sellTablenonHFT.csv";
 
-		//Spread
-		String spreadTablePathFull = statisticsDirectoryPath + "hft-data-spreadTableFull.csv";
-		String spreadTablePathHFT = statisticsDirectoryPath + "hft-data-spreadTableHFT.csv";
-		String spreadTablePathnonHFT = statisticsDirectoryPath + "hft-data-spreadTablenonHFT.csv";
+		// Spread: All
+		String spreadTablePathFullAll = statisticsDirectoryPath + "hft-data-spreadTableFull-all.csv";
+		String spreadTablePathHFTAll = statisticsDirectoryPath + "hft-data-spreadTableHFT-all.csv";
+		String spreadTablePathnonHFTAll = statisticsDirectoryPath + "hft-data-spreadTablenonHFT-all.csv";
 		
-		// StatisticsTable
+		// Spread: Ranged
+		String spreadTablePathFullRanged = statisticsDirectoryPath + "hft-data-spreadTableFull-ranged.csv";
+		String spreadTablePathHFTRanged = statisticsDirectoryPath + "hft-data-spreadTableHFT-ranged.csv";
+		String spreadTablePathnonHFTRanged = statisticsDirectoryPath + "hft-data-spreadTablenonHFT-ranged.csv";
+
+		// Activity Type Table
 		String activityTablePath = statisticsDirectoryPath + "hft-data-activityTable.csv";
 
+		// Standard Deviation
+		String standardDeviationTablePath = statisticsDirectoryPath + "hft-data-StandardDeviationTable.csv";
+		
 		try {
 			System.out.println("### Start creating statistics CSVs");
 			
 			// calcSpreads
 			// dataSellTables and dataBuyTables must exists!
-			//int calcSpreadRange = -1;
+			int calcSpreadAll = -1;
 			int calcSpreadRange = 10000;
-			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePathFull, calcSpreadRange);
-			calcSpread(dataSellTablePathHFT, dataBuyTablePathHFT, spreadTablePathHFT, calcSpreadRange);
-			calcSpread(dataSellTablePathnonHFT, dataBuyTablePathnonHFT, spreadTablePathnonHFT, calcSpreadRange);
+			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePathFullAll, calcSpreadAll);
+			calcSpread(dataSellTablePathHFT, dataBuyTablePathHFT, spreadTablePathHFTAll, calcSpreadAll);
+			calcSpread(dataSellTablePathnonHFT, dataBuyTablePathnonHFT, spreadTablePathnonHFTAll, calcSpreadAll);
 			
+			calcSpread(dataSellTablePathFull, dataBuyTablePathFull, spreadTablePathFullRanged, calcSpreadRange);
+			calcSpread(dataSellTablePathHFT, dataBuyTablePathHFT, spreadTablePathHFTRanged, calcSpreadRange);
+			calcSpread(dataSellTablePathnonHFT, dataBuyTablePathnonHFT, spreadTablePathnonHFTRanged, calcSpreadRange);
+
 			// get more statistics
 			getActivityTypeFrequencies(dataSellTablePathHFT, dataBuyTablePathHFT, dataSellTablePathnonHFT, dataBuyTablePathnonHFT, activityTablePath, ";");
+			
+			// get standard deviation
+			ArrayList<String> deviationsPathArray = new ArrayList<String>(9);
+			deviationsPathArray.add(dataExecutionPriceTablePathFull);
+			deviationsPathArray.add(dataExecutionPriceTablePathHFT);
+			deviationsPathArray.add(dataExecutionPriceTablePathnonHFT);
+			deviationsPathArray.add(dataBuyTablePathFull);
+			deviationsPathArray.add(dataBuyTablePathHFT);
+			deviationsPathArray.add(dataBuyTablePathnonHFT);
+			deviationsPathArray.add(dataSellTablePathFull);
+			deviationsPathArray.add(dataSellTablePathHFT);
+			deviationsPathArray.add(dataSellTablePathnonHFT);
+			getStandardDeviations(deviationsPathArray, standardDeviationTablePath);
 			
 			System.out.println("### Finished creating data CSVs");
 
@@ -119,7 +149,7 @@ public class HftStatistics {
 				double sellCount = Double.parseDouble(sellSplit[2]);
 				double buyCount = Double.parseDouble(buySplit[2]);
 				
-				double countDifference = sellCount - buyCount;
+				double countDifference = sellCount / buyCount;
 				double countDifferenceWithPrecision = new BigDecimal(countDifference).setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
 
 				bw.write(sellSplit[0] + ";" + String.valueOf(priceDifferenceWithPrecision) + ";" + String.valueOf(countDifferenceWithPrecision) + "\n");
@@ -201,7 +231,6 @@ public class HftStatistics {
 		while((line = br.readLine()) != null){
 			String[] cells = line.split(separator);
 			line = "";
-			// Split in HFT and nonHFT
 			switch (cells[COLUMN_ACTIVITY_TYPE]) {
 				case ACTIVITY_TYPE_ADD_ORDER:
 					addOrderCount++;
@@ -222,6 +251,47 @@ public class HftStatistics {
 		}
 		
 		String result = HFT + separator + side + separator + addOrderCount + separator + deleteOrderCount + separator + modifyOrderCount + separator + fullOrderExecutionCount + separator + "\n";
+		return result;
+	}
+	
+	public static void getStandardDeviations(ArrayList<String> paths, String resultFile) throws IOException {
+		ArrayList<Double> resultList = new ArrayList<Double>(9);
+		for (String path : paths) {
+			double result = 0;
+			String currentLine;
+			ArrayList<Double> priceList = new ArrayList<Double>(9);
+			BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+			
+			currentLine = br.readLine();
+			while((currentLine = br.readLine()) != null) {
+				String[] cell = currentLine.split(";");
+				priceList.add(Double.parseDouble(cell[COLUMN_PRICE]));
+			}
+			
+			result = calculateStandardDeviations(priceList);
+			
+			resultList.add(result);
+			br.close();
+		}
+		
+		// Write results in file
+		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(resultFile)));
+		for (Double result : resultList) {
+			bw.write(result + "\n");
+		}
+		bw.close();
+		System.out.println("getStandardDeviations finished");
+
+	}
+	
+	public static Double calculateStandardDeviations(ArrayList<Double> priceList) {
+		double result = 0;
+		double sum = 0;
+		for (Double price : priceList) {
+			sum += price;
+		}
+		
+		result = Math.sqrt(sum/priceList.size());
 		return result;
 	}
 }

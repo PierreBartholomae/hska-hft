@@ -63,6 +63,7 @@ getPaths <- function(mode="Full") {
   dataSellTablePath <- paste(dataPath, "hft-data-sellTable", mode, ".csv", sep="")
   
   paths <- c(dataExecutionPriceTablePath, dataSellTablePath, dataBuyTablePath)
+  print(paths)
   
   return(paths)
 }
@@ -79,7 +80,7 @@ plotData <- function (executionPriceTableData, sellTableData, buyTableData, yRan
   color3 <- "#31a84a"
   color4 <- "#f2811c"
   
-  plot(buyTableData$ID, buyTableData$BuyPrice, ylim = yRange, type=plotType, col = color2, xlab="ID", ylab="Price")
+  plot(buyTableData$ID, buyTableData$BuyPrice, ylim = yRange, xlim=range(1:500000), type=plotType, col = color2, xlab="ID", ylab="Price")
   lines(sellTableData$ID, sellTableData$SellPrice, ylim = yRange, type=plotType, col = color1)
   lines(executionPriceTableData$ID, executionPriceTableData$EXECUTION_PRICE, ylim = yRange, type=plotType, col = "Black")
   title(main=paste("Mode:", mode), col.main="red", font.main=4)
@@ -94,7 +95,7 @@ plotData <- function (executionPriceTableData, sellTableData, buyTableData, yRan
 # Main
 
 # modes: Full, HFT, nonHFT
-mode <- "nonHFT"
+mode <- "HFT"
 paths <- getPaths(mode)
 
 # any number. negativ value will ignore this parameter (for all rows) 
@@ -105,5 +106,5 @@ sellTableData <- loadDataSellTable(paths[2], rows)
 buyTableData <- loadDataBuyTable(paths[3], rows)
 
 # range(9.035,9.08)
-plotData(executionPriceTableData, sellTableData, buyTableData, range(8.98,9.1), mode, plotType = "s")
+plotData(executionPriceTableData, sellTableData, buyTableData, range(9.06,9.07), mode, plotType = "s")
 
