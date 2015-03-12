@@ -174,7 +174,7 @@ public class Hft {
 		BufferedReader br = new BufferedReader(new FileReader(new File(oldFile)));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(newFile)));
 		String line = br.readLine();
-		bw.write(line + "\n");
+		bw.write(line + ";ExecutionPrice" + "\n");
 		while((line = br.readLine()) != null){
 			String[] split = line.split(seperator);
 			line = "";
@@ -183,7 +183,8 @@ public class Hft {
 				for(String s : split){
 					line = line.concat(s + ";");
 				}
-				line = line.substring(0,line.length()-1);
+				// add execution price in last row
+				line = line.concat(split[16]);
 
 				bw.write(line + "\n");
 			}
