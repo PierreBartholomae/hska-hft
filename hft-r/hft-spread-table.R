@@ -32,13 +32,14 @@ plotAllData <- function (spreadTableDataFull, spreadTableDataHFT, spreadTableDat
        xlab="Summarized IDs", ylab="Spread",
        ylim = yRange, type = plotType, col = color1, bg = color1, pch=21)
   lines(spreadTableDataHFT$CurrentStep, spreadTableDataHFT$Spread,
-        ylim = yRange, type = plotType, col = color2, bg = color2, pch=21)
-  lines(spreadTableDataFull$CurrentStep, spreadTableDataFull$Spread,
         ylim = yRange, type = plotType, col = color3, bg = color3, pch=21)
+  lines(spreadTableDataFull$CurrentStep, spreadTableDataFull$Spread,
+        ylim = yRange, type = plotType, col = color2, bg = color2, pch=21)
   
   title(main=paste("Spreads - Step size:",spreadTableDataFull$CurrentStep[1], sep=" "), col.main="black", font.main=4)
   
-  legend("topright", inset=.05, c("Full Data Spread","HFT Data Spread","nonHFT Data Spread"), fill=c(color1,color2,color3), bty="n")
+  legend("bottomleft", c("nonHFT Data Spread","Full Data Spread","HFT Data Spread"),
+         fill=c(color1,color2,color3), bty="n", pt.cex=1, cex=0.9)
   
   endDate <- as.numeric(Sys.time())
   plottingDuration <- endDate-startDate
@@ -59,7 +60,7 @@ plotFullData <- function (spreadTableDataFull, yRange = range(0.005,0.035), mode
   
   title(main=paste("Spreads - Step size:",spreadTableDataFull$CurrentStep[1], sep=" "), col.main="black", font.main=4)
   
-  legend("topright", inset=.05, c("Full Data Spread"), fill=c(color3), bty="n")
+  legend("bottomleft", inset=.05, c("Full Data Spread"), fill=c(color3), bty="n")
   
   endDate <- as.numeric(Sys.time())
   plottingDuration <- endDate-startDate
@@ -149,6 +150,8 @@ getPath <- function(mode="Full", isDataRanged=TRUE) {
 # Main
 
 # splitted: TRUE or FALSE
+# TRUE for ranged data set
+# FALSE for all data combined
 isDataRanged <- TRUE
 
 # modes: Full, HFT, nonHFT
@@ -167,7 +170,7 @@ spreadTableDatanonHFT <- loadSpreadTable(path)
 # -------------------------------- #
 # Plot for step size > 0
 if (isDataRanged) {
-  plotAllData(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.045), mode, plotType = "o")
+  plotAllData(spreadTableDataFull, spreadTableDataHFT, spreadTableDatanonHFT, yRange = range(0.004,0.0325), mode, plotType = "p")
 
   #plotFullData(spreadTableDataFull, yRange = range(0.004,0.045), mode, plotType = "o")
 
