@@ -23,6 +23,8 @@ plotAllData <- function (spreadTableDataFull, spreadTableDataHFT, spreadTableDat
   
   startDate <- as.numeric(Sys.time());
   
+  zoomFactor <- 1.25
+
   color1 <- "#31a84a"  
   color2 <- "#b33438"
   color3 <- "#0076e7"
@@ -30,16 +32,23 @@ plotAllData <- function (spreadTableDataFull, spreadTableDataHFT, spreadTableDat
   
   plot(spreadTableDatanonHFT$CurrentStep, spreadTableDatanonHFT$Spread,
        xlab="Summarized IDs", ylab="Spread",
-       ylim = yRange, type = plotType, col = color1, bg = color1, pch=21)
+       ylim = yRange, type = plotType, col = color1, bg = color1, pch=21,
+       xaxt="n", yaxt="n",
+       cex.lab=zoomFactor, cex.axis=zoomFactor, cex.main=zoomFactor, cex.sub=zoomFactor)
   lines(spreadTableDataHFT$CurrentStep, spreadTableDataHFT$Spread,
         ylim = yRange, type = plotType, col = color3, bg = color3, pch=21)
   lines(spreadTableDataFull$CurrentStep, spreadTableDataFull$Spread,
         ylim = yRange, type = plotType, col = color2, bg = color2, pch=21)
   
-  title(main=paste("Spreads - Step size:",spreadTableDataFull$CurrentStep[1], sep=" "), col.main="black", font.main=4)
+  axis(1, cex.axis=zoomFactor)
+  axis(2, cex.axis=zoomFactor)
   
-  legend("bottomleft", c("nonHFT Data Spread","Full Data Spread","HFT Data Spread"),
-         fill=c(color1,color2,color3), bty="n", pt.cex=1, cex=0.9)
+  #title(main=paste("Spreads - Step size:",spreadTableDataFull$CurrentStep[1], sep=" "), col.main="black", font.main=4)
+  
+  legend("bottomleft",
+         c("nonHFT Data Spread","Full Data Spread","HFT Data Spread"),
+         fill=c(color1,color2,color3),
+         pt.cex=1, cex=zoomFactor, bty="n")
   
   endDate <- as.numeric(Sys.time())
   plottingDuration <- endDate-startDate
@@ -156,7 +165,7 @@ getPath <- function(mode="Full", isDataRanged=TRUE) {
 # splitted: TRUE or FALSE
 # TRUE for ranged data set
 # FALSE for all data combined
-isDataRanged <- FALSE
+isDataRanged <- TRUE
 
 # modes: Full, HFT, nonHFT
 mode <- "Full"
