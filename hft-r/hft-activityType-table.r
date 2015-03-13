@@ -38,6 +38,8 @@ plotData <- function (tableData) {
   
   startDate <- as.numeric(Sys.time());
   
+  zoomFactor <- 1.25
+  
   color1 <- "#b33438"
   color2 <- "#0076e7"
   color3 <- "#31a84a"
@@ -50,22 +52,27 @@ plotData <- function (tableData) {
   
   data <- matrix(c(lineAddOrder, lineModifyOrder, lineDeleteOrder, lineFullOrderExecution), nrow=4, ncol=4)
   
-  lineHeader <- c("Add Order", "Modify Order", "Delete Order", "Full Order Execution")
+  lineHeader <- c("Add Order", "Modify Order", "Delete Order", "Order Execution")
     
-  barplot(data, main="Activity frequencies",
-          col=c(color1,color2,color3,color4),
+  barplot(data, col=c(color1,color2,color3,color4),
           xlab="Activity types", ylab="Frequency",
-          beside=TRUE, space=c(0.2,0.75), xaxt="n")
+          beside=TRUE, space=c(0.2,0.75),
+          xaxt="n", yaxt="n",
+          cex.lab=zoomFactor, cex.axis=zoomFactor, cex.main=zoomFactor, cex.sub=zoomFactor)
   
-  axis(1, at=c(3, 8.5, 14, 19), label=lineHeader)
+  axis(1, cex.axis=zoomFactor,
+       at=c(3, 8.5, 14, 19), label=lineHeader)
+  axis(2, cex.axis=zoomFactor)
   
   label1 <- paste("HFT:", tableData[1,1], "- Side:", tableData[1,2], sep=" ")
   label2 <- paste("HFT:", tableData[2,1], "- Side:", tableData[2,2], sep=" ")
   label3 <- paste("HFT:", tableData[3,1], "- Side:", tableData[3,2], sep=" ")
   label4 <- paste("HFT:", tableData[4,1], "- Side:", tableData[4,2], sep=" ")
   
-  legend("topright", c(label1, label2, label3, label4), fill=c(color1,color2,color3,color4),
-         inset=.05, bty="n")
+  legend("topright",
+         c(label1, label2, label3, label4),
+         fill=c(color1,color2,color3,color4),
+         pt.cex=1, cex=zoomFactor, bty="n")
   
   endDate <- as.numeric(Sys.time())
   plottingDuration <- endDate-startDate
@@ -78,3 +85,4 @@ plotData <- function (tableData) {
 path <- getPath()
 tableData <- loadTable(path)
 plotData(tableData)
+

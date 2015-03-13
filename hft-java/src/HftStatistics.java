@@ -14,6 +14,7 @@ public class HftStatistics {
 	public static final String ACTIVITY_TYPE_ADD_ORDER = "ADD_ORDER";
 	public static final String ACTIVITY_TYPE_DELETE_ORDER = "DELETE_ORDER";
 	public static final String ACTIVITY_TYPE_FULL_ORDER_EXECUTION = "FULL_ORDER_EXECUTION";
+	public static final String ACTIVITY_TYPE_PARTIAL_ORDER_EXECUTION = "PARTIAL_ORDER_EXECUTION";
 	
 	public static final Integer COLUMN_ID = 1;
 	public static final Integer COLUMN_ACTIVITY_TYPE = 9;//10;
@@ -201,7 +202,7 @@ public class HftStatistics {
 		BufferedReader brBuynonHFT = new BufferedReader(new FileReader(new File(buyFilenonHFT)));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(resultFile)));
 		
-		bw.write("HFT" + separator + "Side" + separator + "Add Order" + separator + "Delete Order" + separator + "Modify Order" + separator + "Full Order Execution" + separator + "\n");
+		bw.write("HFT" + separator + "Side" + separator + "Add Order" + separator + "Delete Order" + separator + "Modify Order" + separator + "Order Execution" + "\n");
 
 		String sellLineHFT = getActivityTypeForSide(brSellHFT, "Sell", separator, 1);
 		String buyLineHFT = getActivityTypeForSide(brBuyHFT, "Buy", separator, 1);
@@ -226,7 +227,7 @@ public class HftStatistics {
 		Integer addOrderCount = 0;
 		Integer deleteOrderCount = 0;
 		Integer modifyOrderCount = 0;
-		Integer fullOrderExecutionCount = 0;
+		Integer orderExecutionCount = 0;
 		
 		while((line = br.readLine()) != null){
 			String[] cells = line.split(separator);
@@ -242,7 +243,12 @@ public class HftStatistics {
 					modifyOrderCount++;
 					break;
 				case ACTIVITY_TYPE_FULL_ORDER_EXECUTION:
-					fullOrderExecutionCount++;
+					// combine partial and full order Ececution
+					orderExecutionCount++;
+					break;
+				case ACTIVITY_TYPE_PARTIAL_ORDER_EXECUTION:
+					// combine partial and full order Ececution
+					orderExecutionCount++;
 					break;
 				default:
 					break;
@@ -250,7 +256,7 @@ public class HftStatistics {
 			count++;
 		}
 		
-		String result = HFT + separator + side + separator + addOrderCount + separator + deleteOrderCount + separator + modifyOrderCount + separator + fullOrderExecutionCount + separator + "\n";
+		String result = HFT + separator + side + separator + addOrderCount + separator + deleteOrderCount + separator + modifyOrderCount + separator + orderExecutionCount + "\n";
 		return result;
 	}
 	
